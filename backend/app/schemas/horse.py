@@ -17,3 +17,10 @@ class HorseResponse(BaseModel):
     odds: float | None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class HorseUpdate(BaseModel):
+    post_position: int | None = Field(None, description="馬番", ge=1)
+    horse_name: str | None = Field(None, description="馬名", max_length=100)
+    jockey: str | None = Field(None, description="騎手名", max_length=50)
+    odds: float | None = Field(None, description="単勝オッズ", ge=0)
