@@ -411,3 +411,51 @@ GET {{baseUrl}}/bets/{{betId}}
 
 ###
 
+
+# =============================================================================
+# 7. レース結果操作（results）
+# =============================================================================
+
+### [7-1] レース結果登録
+# レスポンスの id を @resultId に設定してください
+POST {{baseUrl}}/races/{{raceId}}/result
+Content-Type: application/json
+
+{
+  "order_of_finish": "3-5-2",
+  "total_return": 1800
+}
+
+###
+
+### [7-2] 既に存在する race_id への登録 → 400 確認
+POST {{baseUrl}}/races/{{raceId}}/result
+Content-Type: application/json
+
+{
+  "total_return": 2000
+}
+
+###
+
+### [7-3] レース結果取得
+# 事前に馬券（bets）が登録されていれば total_bet / profit / roi が計算される
+GET {{baseUrl}}/races/{{raceId}}/result
+
+###
+
+### [7-4] 存在しない race_id への結果取得 → 404 確認
+GET {{baseUrl}}/races/9999/result
+
+###
+
+### [7-5] 存在しない race_id への結果登録 → 404 確認
+POST {{baseUrl}}/races/9999/result
+Content-Type: application/json
+
+{
+  "total_return": 0
+}
+
+###
+
