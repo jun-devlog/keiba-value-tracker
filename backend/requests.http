@@ -299,3 +299,67 @@ DELETE {{baseUrl}}/predictions/{{predictionId}}
 DELETE {{baseUrl}}/predictions/9999
 
 ###
+
+
+# =============================================================================
+# 6. 馬券操作（bets）
+# =============================================================================
+
+### [6-1] 馬券登録（単勝）
+# レスポンスの id を @betId に設定してください
+POST {{baseUrl}}/races/{{raceId}}/bets
+Content-Type: application/json
+
+{
+  "bet_type_id": 1,
+  "amount": 1000,
+  "combination": "3"
+}
+
+###
+
+### [6-2] 馬券登録（馬連）
+POST {{baseUrl}}/races/{{raceId}}/bets
+Content-Type: application/json
+
+{
+  "bet_type_id": 4,
+  "amount": 500,
+  "combination": "2-5"
+}
+
+###
+
+### [6-3] 馬券一覧（id 昇順確認）
+GET {{baseUrl}}/races/{{raceId}}/bets
+
+###
+
+### [6-4] 存在しない race_id → 404 確認
+GET {{baseUrl}}/races/9999/bets
+
+###
+
+### [6-5] 存在しない bet_type_id → 404 確認
+POST {{baseUrl}}/races/{{raceId}}/bets
+Content-Type: application/json
+
+{
+  "bet_type_id": 9999,
+  "amount": 500,
+  "combination": "1"
+}
+
+###
+
+### [6-6] amount が 100 未満 → 422 確認
+POST {{baseUrl}}/races/{{raceId}}/bets
+Content-Type: application/json
+
+{
+  "bet_type_id": 1,
+  "amount": 50,
+  "combination": "1"
+}
+
+###
