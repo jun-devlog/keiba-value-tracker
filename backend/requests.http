@@ -5,9 +5,10 @@
 #   2. 各リクエストを上から順に実行し、登録した ID を @raceId / @horseId に手動で設定する
 # =============================================================================
 
-@baseUrl = http://localhost:8000/api/v1
-@raceId  = 1
-@horseId = 2
+@baseUrl       = http://localhost:8000/api/v1
+@raceId        = 1
+@horseId       = 2
+@predictionId  = 1
 
 
 # =============================================================================
@@ -166,5 +167,135 @@ Content-Type: application/json
 ### [4-6] 出走馬削除
 # 削除後は [4-1] を再実行して 404 になることを確認してください
 DELETE {{baseUrl}}/horses/{{horseId}}
+
+###
+
+
+# =============================================================================
+# 5. 予想操作（predictions）
+# =============================================================================
+
+### [5-1] 予想登録（rank=1、自信度=0.9）
+# レスポンスの id を @predictionId に設定してください
+POST {{baseUrl}}/races/{{raceId}}/predictions
+Content-Type: application/json
+
+{
+  "horse_id": {{horseId}},
+  "rank": 1,
+  "confidence": 0.9,
+  "memo": "本命"
+}
+
+###
+
+### [5-2] 予想登録（rank=2、memo 省略）
+# 必要に応じて horse_id を別の馬 ID に変更してください
+POST {{baseUrl}}/races/{{raceId}}/predictions
+Content-Type: application/json
+
+{
+  "horse_id": {{horseId}},
+  "rank": 2,
+  "confidence": 0.5
+}
+
+###
+
+### [5-3] 予想一覧（rank 昇順確認）
+GET {{baseUrl}}/races/{{raceId}}/predictions
+
+###
+
+### [5-4] 存在しない race_id → 404 確認
+POST {{baseUrl}}/races/9999/predictions
+Content-Type: application/json
+
+{
+  "horse_id": {{horseId}}
+}
+
+###
+
+### [5-5] 存在しない horse_id → 404 確認
+POST {{baseUrl}}/races/{{raceId}}/predictions
+Content-Type: application/json
+
+{
+  "horse_id": 9999
+}
+
+###
+
+### [5-6] horse_id が race_id に紐づかない → 400 確認
+# @horseId を「別レースに登録した馬の id」に書き換えて実行してください
+# 例: race_id=2 に登録された horse_id=8 を race_id=1 に対して予想しようとする
+POST {{baseUrl}}/races/{{raceId}}/predictions
+Content-Type: application/json
+
+{
+  "horse_id": 8
+}
+
+###
+
+### [5-7] 予想詳細
+GET {{baseUrl}}/predictions/{{predictionId}}
+
+###
+
+### [5-8] 予想詳細（存在しない prediction_id → 404 確認）
+GET {{baseUrl}}/predictions/9999
+
+###
+
+### [5-9] 予想部分更新（confidence のみ変更）
+PATCH {{baseUrl}}/predictions/{{predictionId}}
+Content-Type: application/json
+
+{
+  "confidence": 0.75
+}
+
+###
+
+### [5-10] 予想部分更新（memo のみ変更）
+PATCH {{baseUrl}}/predictions/{{predictionId}}
+Content-Type: application/json
+
+{
+  "memo": "対抗に変更"
+}
+
+###
+
+### [5-11] 予想部分更新（存在しない prediction_id → 404 確認）
+PATCH {{baseUrl}}/predictions/9999
+Content-Type: application/json
+
+{
+  "confidence": 0.5
+}
+
+###
+
+### [5-12] 予想部分更新（存在しない horse_id → 404 確認）
+PATCH {{baseUrl}}/predictions/{{predictionId}}
+Content-Type: application/json
+
+{
+  "horse_id": 9999
+}
+
+###
+
+### [5-13] 予想削除
+# 削除後は [5-7] を再実行して 404 になることを確認してください
+DELETE {{baseUrl}}/predictions/{{predictionId}}
+
+###
+
+### [5-14] 予想削除（存在しない prediction_id → 404 確認）
+DELETE {{baseUrl}}/predictions/9999
 
 ###
