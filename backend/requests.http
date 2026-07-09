@@ -1,0 +1,170 @@
+# =============================================================================
+# keiba-value-tracker API — REST Client requests
+# 使い方:
+#   1. サーバーを起動: .venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+#   2. 各リクエストを上から順に実行し、登録した ID を @raceId / @horseId に手動で設定する
+# =============================================================================
+
+@baseUrl = http://localhost:8000/api/v1
+@raceId  = 1
+@horseId = 2
+
+
+# =============================================================================
+# 1. マスタ確認
+# =============================================================================
+
+### [1-1] 競馬場マスタ一覧
+GET {{baseUrl}}/venues
+
+###
+
+### [1-2] 馬券種別マスタ一覧
+GET {{baseUrl}}/bet_types
+
+###
+
+
+# =============================================================================
+# 2. レース操作
+# =============================================================================
+
+### [2-1] レース登録
+# レスポンスの id を @raceId に設定してください
+POST {{baseUrl}}/races
+Content-Type: application/json
+
+{
+  "venue_id": 1,
+  "race_date": "2026-07-12",
+  "race_number": 11,
+  "race_name": "テストレース",
+  "grade": null,
+  "distance": 1600,
+  "track_type": "芝"
+}
+
+###
+
+### [2-2] レース一覧（フィルタなし）
+GET {{baseUrl}}/races
+
+###
+
+### [2-3] レース一覧（venue_id フィルタ）
+GET {{baseUrl}}/races?venue_id=1
+
+###
+
+### [2-4] レース一覧（race_date フィルタ）
+GET {{baseUrl}}/races?race_date=2026-07-12
+
+###
+
+### [2-5] レース詳細
+GET {{baseUrl}}/races/{{raceId}}
+
+###
+
+### [2-6] レース部分更新（PATCH）
+PATCH {{baseUrl}}/races/{{raceId}}
+Content-Type: application/json
+
+{
+  "race_name": "更新テストレース"
+}
+
+###
+
+
+# =============================================================================
+# 3. 出走馬操作（レースに紐付く）
+# =============================================================================
+
+### [3-1] 出走馬登録（馬番 1）
+# レスポンスの id を @horseId に設定してください
+POST {{baseUrl}}/races/{{raceId}}/horses
+Content-Type: application/json
+
+{
+  "post_position": 1,
+  "horse_name": "テスト馬A",
+  "jockey": "騎手A",
+  "odds": 2.1
+}
+
+###
+
+### [3-2] 出走馬登録（馬番 2・jockey/odds 省略）
+POST {{baseUrl}}/races/{{raceId}}/horses
+Content-Type: application/json
+
+{
+  "post_position": 2,
+  "horse_name": "テスト馬B"
+}
+
+###
+
+### [3-3] 出走馬一覧（馬番昇順）
+GET {{baseUrl}}/races/{{raceId}}/horses
+
+###
+
+### [3-4] 存在しない race_id → 404 確認
+GET {{baseUrl}}/races/9999/horses
+
+###
+
+
+# =============================================================================
+# 4. 出走馬個別操作（horse_id 指定）
+# =============================================================================
+
+### [4-1] 出走馬詳細
+GET {{baseUrl}}/horses/{{horseId}}
+
+###
+
+### [4-2] 出走馬詳細（存在しない horse_id → 404 確認）
+GET {{baseUrl}}/horses/9999
+
+###
+
+### [4-3] 出走馬部分更新（odds のみ変更）
+PATCH {{baseUrl}}/horses/{{horseId}}
+Content-Type: application/json
+
+{
+  "odds": 9.9
+}
+
+###
+
+### [4-4] 出走馬部分更新（複数フィールド変更）
+PATCH {{baseUrl}}/horses/{{horseId}}
+Content-Type: application/json
+
+{
+  "horse_name": "更新馬A",
+  "jockey": "更新騎手",
+  "odds": 5.5
+}
+
+###
+
+### [4-5] 出走馬部分更新（存在しない horse_id → 404 確認）
+PATCH {{baseUrl}}/horses/9999
+Content-Type: application/json
+
+{
+  "odds": 1.0
+}
+
+###
+
+### [4-6] 出走馬削除
+# 削除後は [4-1] を再実行して 404 になることを確認してください
+DELETE {{baseUrl}}/horses/{{horseId}}
+
+###
