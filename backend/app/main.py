@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers import venues_router, bet_types_router, races_router, horses_router, predictions_router, bets_router, results_router
+from app.routers import venues_router, bet_types_router, races_router, horses_router, predictions_router, bets_router, results_router, stats_router
 
 app = FastAPI(
     title="keiba-value-tracker API",
@@ -15,6 +15,7 @@ app.include_router(horses_router, prefix="/api/v1", tags=["horses"])
 app.include_router(predictions_router, prefix="/api/v1", tags=["predictions"])
 app.include_router(bets_router, prefix="/api/v1", tags=["bets"])
 app.include_router(results_router, prefix="/api/v1", tags=["results"])
+app.include_router(stats_router, prefix="/api/v1", tags=["stats"])
 
 
 @app.get("/")

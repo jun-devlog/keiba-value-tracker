@@ -5,3 +5,5 @@ from .horses import router as horses_router              # noqa: F401
 from .predictions import router as predictions_router    # noqa: F401
 from .bets import router as bets_router                  # noqa: F401
 from .results import router as results_router            # noqa: F401
+from .stats import router as stats_router                # noqa: F401
+
