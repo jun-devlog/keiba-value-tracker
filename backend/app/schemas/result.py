@@ -8,6 +8,11 @@ class ResultCreate(BaseModel):
     total_return: int = Field(..., description="払戻金合計", ge=0)
 
 
+class ResultUpdate(BaseModel):
+    order_of_finish: str | None = Field(None, description="確定着順", max_length=255)
+    total_return: int | None = Field(None, description="払戻金合計", ge=0)
+
+
 class ResultResponse(BaseModel):
     id: int
     race_id: int

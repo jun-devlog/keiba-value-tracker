@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
@@ -6,7 +6,7 @@ from app.database import get_db
 from app.models.bet import Bet
 from app.models.race import Race
 from app.models.result import Result
-from app.schemas.result import ResultCreate, ResultResponse
+from app.schemas.result import ResultCreate, ResultResponse, ResultUpdate
 
 router = APIRouter()
 
@@ -84,3 +84,48 @@ def get_result(race_id: int, db: Session = Depends(get_db)):
         )
 
     return _build_result_response(result, db)
+
+
+@router.patch(
+    "/results/{result_id}",
+    response_model=ResultResponse,
+    summary="レース結果部分更新",
+)
+def update_result(result_id: int, body: ResultUpdate, db: Session = Depends(get_db)):
+    """指定レース結果を部分更新する。
+    result_id が存在しない場合は 404。
+    race_id は変更不可。
+    """
+    result = db.query(Result).filter(Result.id == result_id).first()
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"result_id={result_id} は存在しません",
+        )
+
+    updates = body.model_dump(exclude_unset=True)
+    for key, value in updates.items():
+        setattr(result, key, value)
+
+    db.commit()
+    db.refresh(result)
+    return _build_result_response(result, db)
+
+
+@router.delete(
+    "/results/{result_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="レース結果削除",
+)
+def delete_result(result_id: int, db: Session = Depends(get_db)):
+    """指定レース結果を削除する。result_id が存在しない場合は 404。成功時は 204 No Content。"""
+    result = db.query(Result).filter(Result.id == result_id).first()
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"result_id={result_id} は存在しません",
+        )
+    db.delete(result)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+

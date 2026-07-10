@@ -10,6 +10,7 @@
 @horseId       = 2
 @predictionId  = 1
 @betId         = 1
+@resultId      = 1
 
 
 # =============================================================================
@@ -458,4 +459,46 @@ Content-Type: application/json
 }
 
 ###
+
+### [7-6] レース結果部分更新
+PATCH {{baseUrl}}/results/{{resultId}}
+Content-Type: application/json
+
+{
+  "order_of_finish": "3-5-2-1",
+  "total_return": 2500
+}
+
+###
+
+### [7-7] レース結果部分更新（total_return=0）
+PATCH {{baseUrl}}/results/{{resultId}}
+Content-Type: application/json
+
+{
+  "total_return": 0
+}
+
+###
+
+### [7-8] レース結果部分更新（total_return=-1 → 422 確認）
+PATCH {{baseUrl}}/results/{{resultId}}
+Content-Type: application/json
+
+{
+  "total_return": -1
+}
+
+###
+
+### [7-9] レース結果削除
+DELETE {{baseUrl}}/results/{{resultId}}
+
+###
+
+### [7-10] 削除後 GET /races/{race_id}/result → 404 確認
+GET {{baseUrl}}/races/{{raceId}}/result
+
+###
+
 
