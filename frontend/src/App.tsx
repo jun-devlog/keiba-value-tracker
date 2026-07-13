@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
-import { fetchStatsSummary } from './api/client';
-import type { StatsSummary } from './types';
+import { fetchStatsSummary, fetchRaces } from './api/client';
+import type { StatsSummary, Race } from './types';
 import './App.css';
 
 function App() {
   const [data, setData] = useState<StatsSummary | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [races, setRaces] = useState<Race[]>([]);
+  const [isRacesLoading, setIsRacesLoading] = useState<boolean>(true);
+  const [racesError, setRacesError] = useState<string | null>(null);
+
 
   useEffect(() => {
     fetchStatsSummary()
@@ -19,6 +24,18 @@ function App() {
       })
       .finally(() => {
         setIsLoading(false);
+      });
+
+    fetchRaces()
+      .then((racesData) => {
+        setRaces(racesData);
+        setRacesError(null);
+      })
+      .catch((err: Error) => {
+        setRacesError(err.message);
+      })
+      .finally(() => {
+        setIsRacesLoading(false);
       });
   }, []);
 
@@ -84,6 +101,59 @@ function App() {
             </div>
           </div>
         )}
+
+        <section className="races-section">
+          <h2 className="section-title">Races</h2>
+          
+          {isRacesLoading && (
+            <div className="loading-state">
+              <div className="spinner"></div>
+              <p>レース情報を読み込み中...</p>
+            </div>
+          )}
+
+          {racesError && (
+            <div className="error-state">
+              <p>Error: {racesError}</p>
+            </div>
+          )}
+
+          {!isRacesLoading && !racesError && races.length === 0 && (
+            <div className="empty-state">
+              <p>レース情報が登録されていません</p>
+            </div>
+          )}
+
+          {!isRacesLoading && !racesError && races.length > 0 && (
+            <div className="races-list">
+              <table className="races-table">
+                <thead>
+                  <tr>
+                    <th>日付</th>
+                    <th>会場ID</th>
+                    <th>R</th>
+                    <th>レース名</th>
+                    <th>コース</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {races.map((race) => (
+                    <tr key={race.id}>
+                      <td>{race.race_date}</td>
+                      <td>{race.venue_id}</td>
+                      <td>{race.race_number}R</td>
+                      <td>
+                        <span className="race-name">{race.race_name}</span>
+                        {race.grade && <span className="race-grade">{race.grade}</span>}
+                      </td>
+                      <td>{race.track_type} {race.distance}m</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
       </main>
     </div>
   );

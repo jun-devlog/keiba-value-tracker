@@ -1,4 +1,4 @@
-import type { StatsSummary } from '../types';
+import type { StatsSummary, Race } from '../types';
 
 export const fetchStatsSummary = async (): Promise<StatsSummary> => {
   const response = await fetch('/api/v1/stats/summary');
@@ -7,3 +7,12 @@ export const fetchStatsSummary = async (): Promise<StatsSummary> => {
   }
   return response.json();
 };
+
+export const fetchRaces = async (): Promise<Race[]> => {
+  const response = await fetch('/api/v1/races');
+  if (!response.ok) {
+    throw new Error('レース一覧の取得に失敗しました');
+  }
+  return response.json();
+};
+
