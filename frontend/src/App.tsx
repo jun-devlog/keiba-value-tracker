@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { fetchStatsSummary, fetchRaces } from './api/client';
-import type { StatsSummary, Race } from './types';
+import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId } from './api/client';
+import type { StatsSummary, Race, Horse } from './types';
 import './App.css';
 
 function App() {
@@ -11,6 +11,12 @@ function App() {
   const [races, setRaces] = useState<Race[]>([]);
   const [isRacesLoading, setIsRacesLoading] = useState<boolean>(true);
   const [racesError, setRacesError] = useState<string | null>(null);
+
+  const [selectedRaceId, setSelectedRaceId] = useState<number | null>(null);
+  const [horses, setHorses] = useState<Horse[]>([]);
+  const [isHorsesLoading, setIsHorsesLoading] = useState<boolean>(false);
+  const [horsesError, setHorsesError] = useState<string | null>(null);
+
 
 
   useEffect(() => {
@@ -38,6 +44,26 @@ function App() {
         setIsRacesLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (selectedRaceId === null) {
+      setHorses([]);
+      return;
+    }
+
+    setIsHorsesLoading(true);
+    fetchHorsesByRaceId(selectedRaceId)
+      .then((horsesData) => {
+        setHorses(horsesData);
+        setHorsesError(null);
+      })
+      .catch((err: Error) => {
+        setHorsesError(err.message);
+      })
+      .finally(() => {
+        setIsHorsesLoading(false);
+      });
+  }, [selectedRaceId]);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(value);
@@ -138,7 +164,11 @@ function App() {
                 </thead>
                 <tbody>
                   {races.map((race) => (
-                    <tr key={race.id}>
+                    <tr 
+                      key={race.id}
+                      className={`clickable-row ${race.id === selectedRaceId ? 'selected-row' : ''}`}
+                      onClick={() => setSelectedRaceId(race.id)}
+                    >
                       <td>{race.race_date}</td>
                       <td>{race.venue_id}</td>
                       <td>{race.race_number}R</td>
@@ -154,6 +184,58 @@ function App() {
             </div>
           )}
         </section>
+
+        {selectedRaceId && (
+          <section className="horses-section">
+            <h2 className="section-title">Horses</h2>
+
+            {isHorsesLoading && (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>出走馬情報を読み込み中...</p>
+              </div>
+            )}
+
+            {horsesError && (
+              <div className="error-state">
+                <p>Error: {horsesError}</p>
+              </div>
+            )}
+
+            {!isHorsesLoading && !horsesError && horses.length === 0 && (
+              <div className="empty-state">
+                <p>出走馬が登録されていません</p>
+              </div>
+            )}
+
+            {!isHorsesLoading && !horsesError && horses.length > 0 && (
+              <div className="horses-list">
+                <table className="races-table">
+                  <thead>
+                    <tr>
+                      <th>馬番</th>
+                      <th>馬名</th>
+                      <th>騎手</th>
+                      <th>人気</th>
+                      <th>オッズ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {horses.map((horse) => (
+                      <tr key={horse.id}>
+                        <td>{horse.post_position}</td>
+                        <td><span className="horse-name">{horse.horse_name}</span></td>
+                        <td>{horse.jockey || '-'}</td>
+                        <td>{horse.popularity ? `${horse.popularity}番人気` : '-'}</td>
+                        <td>{horse.odds ? horse.odds.toFixed(1) : '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        )}
       </main>
     </div>
   );

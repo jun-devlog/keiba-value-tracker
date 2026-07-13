@@ -19,3 +19,15 @@ export interface Race {
   created_at: string;
 }
 
+export interface Horse {
+  id: number;
+  race_id: number;
+  post_position: number;
+  horse_name: string;
+  jockey: string | null;
+  popularity: number | null;
+  odds: number | null;
+  created_at: string;
+}
+
+

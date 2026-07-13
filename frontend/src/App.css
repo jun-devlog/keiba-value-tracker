@@ -240,6 +240,43 @@ body {
   border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
+/* Races Section overrides */
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.selected-row {
+  background-color: rgba(59, 130, 246, 0.2) !important;
+  border-left: 4px solid #3b82f6;
+}
+
+/* Horses Section */
+.horses-section {
+  width: 100%;
+  margin-top: 3rem;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.horses-list {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.horse-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #60a5fa;
+}
+
 .empty-state {
   text-align: center;
   padding: 3rem;
