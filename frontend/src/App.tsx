@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId, fetchPredictionsByRaceId, fetchBetsByRaceId } from './api/client';
-import type { StatsSummary, Race, Horse, Prediction, Bet } from './types';
+import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId, fetchPredictionsByRaceId, fetchBetsByRaceId, fetchResultByRaceId } from './api/client';
+import type { StatsSummary, Race, Horse, Prediction, Bet, Result } from './types';
 import './App.css';
 
 function App() {
@@ -24,6 +24,11 @@ function App() {
   const [bets, setBets] = useState<Bet[]>([]);
   const [isBetsLoading, setIsBetsLoading] = useState<boolean>(false);
   const [betsError, setBetsError] = useState<string | null>(null);
+
+  const [result, setResult] = useState<Result | null>(null);
+  const [isResultLoading, setIsResultLoading] = useState<boolean>(false);
+  const [resultError, setResultError] = useState<string | null>(null);
+
 
 
 
@@ -60,6 +65,7 @@ function App() {
       setHorses([]);
       setPredictions([]);
       setBets([]);
+      setResult(null);
       return;
     }
 
@@ -101,6 +107,19 @@ function App() {
       .finally(() => {
         setIsBetsLoading(false);
       });
+
+    setIsResultLoading(true);
+    fetchResultByRaceId(selectedRaceId)
+      .then((resultData) => {
+        setResult(resultData);
+        setResultError(null);
+      })
+      .catch((err: Error) => {
+        setResultError(err.message);
+      })
+      .finally(() => {
+        setIsResultLoading(false);
+      });
   }, [selectedRaceId]);
 
   const getMarkByRank = (rank: number | null): string => {
@@ -129,7 +148,7 @@ function App() {
   };
 
   const formatPercent = (value: number | null) => {
-    if (value === null) return '- %';
+    if (value === null) return '-';
     return `${value.toFixed(1)} %`;
   };
 
@@ -391,6 +410,62 @@ function App() {
                         <td>{formatDateTime(bet.created_at)}</td>
                       </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        )}
+
+        {selectedRaceId && (
+          <section className="horses-section">
+            <h2 className="section-title">Result</h2>
+
+            {isResultLoading && (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>レース結果情報を読み込み中...</p>
+              </div>
+            )}
+
+            {resultError && (
+              <div className="error-state">
+                <p>Error: {resultError}</p>
+              </div>
+            )}
+
+            {!isResultLoading && !resultError && result === null && (
+              <div className="empty-state">
+                <p>レース結果が登録されていません</p>
+              </div>
+            )}
+
+            {!isResultLoading && !resultError && result !== null && (
+              <div className="horses-list">
+                <table className="races-table">
+                  <thead>
+                    <tr>
+                      <th>着順</th>
+                      <th>投資額</th>
+                      <th>払戻額</th>
+                      <th>収支</th>
+                      <th>回収率</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{result.order_of_finish || '-'}</td>
+                      <td style={{ fontWeight: 600 }}>{formatCurrency(result.total_bet)}</td>
+                      <td style={{ fontWeight: 600, color: result.total_return > 0 ? '#fbbf24' : 'inherit' }}>
+                        {formatCurrency(result.total_return)}
+                      </td>
+                      <td style={{ fontWeight: 600, color: result.profit > 0 ? '#34d399' : (result.profit < 0 ? '#f87171' : 'inherit') }}>
+                        {formatCurrency(result.profit)}
+                      </td>
+                      <td style={{ fontWeight: 600, color: (result.roi && result.roi > 100) ? '#34d399' : 'inherit' }}>
+                        {formatPercent(result.roi)}
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>

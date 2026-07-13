@@ -49,6 +49,18 @@ export interface Bet {
   created_at: string;
 }
 
+export interface Result {
+  id: number;
+  race_id: number;
+  order_of_finish: string | null;
+  total_bet: number;
+  total_return: number;
+  profit: number;
+  roi: number | null;
+  created_at: string;
+}
+
+
 
 
 
