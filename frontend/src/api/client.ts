@@ -1,4 +1,4 @@
-import type { StatsSummary, Race, Horse, Prediction } from '../types';
+import type { StatsSummary, Race, Horse, Prediction, Bet } from '../types';
 
 export const fetchStatsSummary = async (): Promise<StatsSummary> => {
   const response = await fetch('/api/v1/stats/summary');
@@ -37,4 +37,16 @@ export const fetchPredictionsByRaceId = async (raceId: number): Promise<Predicti
   }
   return response.json();
 };
+
+export const fetchBetsByRaceId = async (raceId: number): Promise<Bet[]> => {
+  const response = await fetch(`/api/v1/races/${raceId}/bets`);
+  if (!response.ok) {
+    if (response.status === 404) {
+      throw new Error('指定されたレースが見つかりません');
+    }
+    throw new Error('馬券購入一覧の取得に失敗しました');
+  }
+  return response.json();
+};
+
 

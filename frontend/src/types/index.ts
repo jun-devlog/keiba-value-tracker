@@ -40,5 +40,15 @@ export interface Prediction {
   created_at: string;
 }
 
+export interface Bet {
+  id: number;
+  race_id: number;
+  bet_type_id: number;
+  amount: number;
+  combination: string | null;
+  created_at: string;
+}
+
+
 
 

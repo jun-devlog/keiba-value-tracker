@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId, fetchPredictionsByRaceId } from './api/client';
-import type { StatsSummary, Race, Horse, Prediction } from './types';
+import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId, fetchPredictionsByRaceId, fetchBetsByRaceId } from './api/client';
+import type { StatsSummary, Race, Horse, Prediction, Bet } from './types';
 import './App.css';
 
 function App() {
@@ -20,6 +20,11 @@ function App() {
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [isPredictionsLoading, setIsPredictionsLoading] = useState<boolean>(false);
   const [predictionsError, setPredictionsError] = useState<string | null>(null);
+
+  const [bets, setBets] = useState<Bet[]>([]);
+  const [isBetsLoading, setIsBetsLoading] = useState<boolean>(false);
+  const [betsError, setBetsError] = useState<string | null>(null);
+
 
 
 
@@ -54,6 +59,7 @@ function App() {
     if (selectedRaceId === null) {
       setHorses([]);
       setPredictions([]);
+      setBets([]);
       return;
     }
 
@@ -82,6 +88,19 @@ function App() {
       .finally(() => {
         setIsPredictionsLoading(false);
       });
+
+    setIsBetsLoading(true);
+    fetchBetsByRaceId(selectedRaceId)
+      .then((betsData) => {
+        setBets(betsData);
+        setBetsError(null);
+      })
+      .catch((err: Error) => {
+        setBetsError(err.message);
+      })
+      .finally(() => {
+        setIsBetsLoading(false);
+      });
   }, [selectedRaceId]);
 
   const getMarkByRank = (rank: number | null): string => {
@@ -95,6 +114,18 @@ function App() {
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(value);
+  };
+
+  const formatDateTime = (dateString: string) => {
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return dateString;
+    return d.toLocaleString('ja-JP', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   const formatPercent = (value: number | null) => {
@@ -308,6 +339,56 @@ function App() {
                         <td>{prediction.horse_id}</td>
                         <td>{prediction.confidence !== null ? prediction.confidence.toFixed(2) : '-'}</td>
                         <td>{prediction.memo || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        )}
+
+        {selectedRaceId && (
+          <section className="horses-section">
+            <h2 className="section-title">Bets</h2>
+
+            {isBetsLoading && (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>馬券購入情報を読み込み中...</p>
+              </div>
+            )}
+
+            {betsError && (
+              <div className="error-state">
+                <p>Error: {betsError}</p>
+              </div>
+            )}
+
+            {!isBetsLoading && !betsError && bets.length === 0 && (
+              <div className="empty-state">
+                <p>馬券購入履歴が登録されていません</p>
+              </div>
+            )}
+
+            {!isBetsLoading && !betsError && bets.length > 0 && (
+              <div className="horses-list">
+                <table className="races-table">
+                  <thead>
+                    <tr>
+                      <th>券種ID</th>
+                      <th>金額</th>
+                      <th>買い目</th>
+                      <th>購入日時</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bets.map((bet) => (
+                      <tr key={bet.id}>
+                        <td>{bet.bet_type_id}</td>
+                        <td style={{ fontWeight: 600 }}>{formatCurrency(bet.amount)}</td>
+                        <td>{bet.combination || '-'}</td>
+                        <td>{formatDateTime(bet.created_at)}</td>
                       </tr>
                     ))}
                   </tbody>
