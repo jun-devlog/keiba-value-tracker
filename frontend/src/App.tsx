@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId } from './api/client';
-import type { StatsSummary, Race, Horse } from './types';
+import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId, fetchPredictionsByRaceId } from './api/client';
+import type { StatsSummary, Race, Horse, Prediction } from './types';
 import './App.css';
 
 function App() {
@@ -16,6 +16,11 @@ function App() {
   const [horses, setHorses] = useState<Horse[]>([]);
   const [isHorsesLoading, setIsHorsesLoading] = useState<boolean>(false);
   const [horsesError, setHorsesError] = useState<string | null>(null);
+
+  const [predictions, setPredictions] = useState<Prediction[]>([]);
+  const [isPredictionsLoading, setIsPredictionsLoading] = useState<boolean>(false);
+  const [predictionsError, setPredictionsError] = useState<string | null>(null);
+
 
 
 
@@ -48,6 +53,7 @@ function App() {
   useEffect(() => {
     if (selectedRaceId === null) {
       setHorses([]);
+      setPredictions([]);
       return;
     }
 
@@ -63,7 +69,29 @@ function App() {
       .finally(() => {
         setIsHorsesLoading(false);
       });
+
+    setIsPredictionsLoading(true);
+    fetchPredictionsByRaceId(selectedRaceId)
+      .then((predictionsData) => {
+        setPredictions(predictionsData);
+        setPredictionsError(null);
+      })
+      .catch((err: Error) => {
+        setPredictionsError(err.message);
+      })
+      .finally(() => {
+        setIsPredictionsLoading(false);
+      });
   }, [selectedRaceId]);
+
+  const getMarkByRank = (rank: number | null): string => {
+    if (rank === 1) return '◎';
+    if (rank === 2) return '○';
+    if (rank === 3) return '▲';
+    if (rank === 4) return '△';
+    if (rank !== null) return '☆';
+    return '-';
+  };
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(value);
@@ -228,6 +256,58 @@ function App() {
                         <td>{horse.jockey || '-'}</td>
                         <td>{horse.popularity ? `${horse.popularity}番人気` : '-'}</td>
                         <td>{horse.odds ? horse.odds.toFixed(1) : '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        )}
+
+        {selectedRaceId && (
+          <section className="horses-section">
+            <h2 className="section-title">Predictions</h2>
+
+            {isPredictionsLoading && (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>予想情報を読み込み中...</p>
+              </div>
+            )}
+
+            {predictionsError && (
+              <div className="error-state">
+                <p>Error: {predictionsError}</p>
+              </div>
+            )}
+
+            {!isPredictionsLoading && !predictionsError && predictions.length === 0 && (
+              <div className="empty-state">
+                <p>予想が登録されていません</p>
+              </div>
+            )}
+
+            {!isPredictionsLoading && !predictionsError && predictions.length > 0 && (
+              <div className="horses-list">
+                <table className="races-table">
+                  <thead>
+                    <tr>
+                      <th>印</th>
+                      <th>順位</th>
+                      <th>出走馬ID</th>
+                      <th>自信度</th>
+                      <th>メモ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {predictions.map((prediction) => (
+                      <tr key={prediction.id}>
+                        <td className="prediction-mark">{getMarkByRank(prediction.rank)}</td>
+                        <td>{prediction.rank || '-'}</td>
+                        <td>{prediction.horse_id}</td>
+                        <td>{prediction.confidence !== null ? prediction.confidence.toFixed(2) : '-'}</td>
+                        <td>{prediction.memo || '-'}</td>
                       </tr>
                     ))}
                   </tbody>

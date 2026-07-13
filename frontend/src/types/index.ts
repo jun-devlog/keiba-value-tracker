@@ -30,4 +30,15 @@ export interface Horse {
   created_at: string;
 }
 
+export interface Prediction {
+  id: number;
+  race_id: number;
+  horse_id: number;
+  rank: number | null;
+  confidence: number | null;
+  memo: string | null;
+  created_at: string;
+}
+
+
 
