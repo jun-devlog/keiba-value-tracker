@@ -511,5 +511,13 @@ GET {{baseUrl}}/stats/summary
 
 ###
 
+### [8-2] 馬券種別ごとの収支サマリー取得
+# ※ 注意: MVP暫定仕様として、by-bet-type の total_return は常に 0 が返ります。
+# 正確な券種別回収率は、将来的に result_returns を実装した後に対応する方針です。
+GET {{baseUrl}}/stats/by-bet-type
+
+###
+
+
 
 
