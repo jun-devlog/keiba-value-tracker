@@ -35,7 +35,7 @@ GET {{baseUrl}}/bet_types
 ### [2-1] レース登録
 # レスポンスの id を @raceId に設定してください
 POST {{baseUrl}}/races
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "venue_id": 1,
@@ -71,7 +71,7 @@ GET {{baseUrl}}/races/{{raceId}}
 
 ### [2-6] レース部分更新（PATCH）
 PATCH {{baseUrl}}/races/{{raceId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "race_name": "更新テストレース"
@@ -87,7 +87,7 @@ Content-Type: application/json
 ### [3-1] 出走馬登録（馬番 1）
 # レスポンスの id を @horseId に設定してください
 POST {{baseUrl}}/races/{{raceId}}/horses
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "post_position": 1,
@@ -100,7 +100,7 @@ Content-Type: application/json
 
 ### [3-2] 出走馬登録（馬番 2・jockey/odds 省略）
 POST {{baseUrl}}/races/{{raceId}}/horses
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "post_position": 2,
@@ -136,7 +136,7 @@ GET {{baseUrl}}/horses/9999
 
 ### [4-3] 出走馬部分更新（odds のみ変更）
 PATCH {{baseUrl}}/horses/{{horseId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "odds": 9.9
@@ -146,7 +146,7 @@ Content-Type: application/json
 
 ### [4-4] 出走馬部分更新（複数フィールド変更）
 PATCH {{baseUrl}}/horses/{{horseId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "horse_name": "更新馬A",
@@ -158,7 +158,7 @@ Content-Type: application/json
 
 ### [4-5] 出走馬部分更新（存在しない horse_id → 404 確認）
 PATCH {{baseUrl}}/horses/9999
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "odds": 1.0
@@ -180,7 +180,7 @@ DELETE {{baseUrl}}/horses/{{horseId}}
 ### [5-1] 予想登録（rank=1、自信度=0.9）
 # レスポンスの id を @predictionId に設定してください
 POST {{baseUrl}}/races/{{raceId}}/predictions
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "horse_id": {{horseId}},
@@ -194,7 +194,7 @@ Content-Type: application/json
 ### [5-2] 予想登録（rank=2、memo 省略）
 # 必要に応じて horse_id を別の馬 ID に変更してください
 POST {{baseUrl}}/races/{{raceId}}/predictions
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "horse_id": {{horseId}},
@@ -211,7 +211,7 @@ GET {{baseUrl}}/races/{{raceId}}/predictions
 
 ### [5-4] 存在しない race_id → 404 確認
 POST {{baseUrl}}/races/9999/predictions
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "horse_id": {{horseId}}
@@ -221,7 +221,7 @@ Content-Type: application/json
 
 ### [5-5] 存在しない horse_id → 404 確認
 POST {{baseUrl}}/races/{{raceId}}/predictions
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "horse_id": 9999
@@ -233,7 +233,7 @@ Content-Type: application/json
 # @horseId を「別レースに登録した馬の id」に書き換えて実行してください
 # 例: race_id=2 に登録された horse_id=8 を race_id=1 に対して予想しようとする
 POST {{baseUrl}}/races/{{raceId}}/predictions
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "horse_id": 8
@@ -253,7 +253,7 @@ GET {{baseUrl}}/predictions/9999
 
 ### [5-9] 予想部分更新（confidence のみ変更）
 PATCH {{baseUrl}}/predictions/{{predictionId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "confidence": 0.75
@@ -263,7 +263,7 @@ Content-Type: application/json
 
 ### [5-10] 予想部分更新（memo のみ変更）
 PATCH {{baseUrl}}/predictions/{{predictionId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "memo": "対抗に変更"
@@ -273,7 +273,7 @@ Content-Type: application/json
 
 ### [5-11] 予想部分更新（存在しない prediction_id → 404 確認）
 PATCH {{baseUrl}}/predictions/9999
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "confidence": 0.5
@@ -283,7 +283,7 @@ Content-Type: application/json
 
 ### [5-12] 予想部分更新（存在しない horse_id → 404 確認）
 PATCH {{baseUrl}}/predictions/{{predictionId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "horse_id": 9999
@@ -310,7 +310,7 @@ DELETE {{baseUrl}}/predictions/9999
 ### [6-1] 馬券登録（単勝）
 # レスポンスの id を @betId に設定してください
 POST {{baseUrl}}/races/{{raceId}}/bets
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "bet_type_id": 1,
@@ -322,7 +322,7 @@ Content-Type: application/json
 
 ### [6-2] 馬券登録（馬連）
 POST {{baseUrl}}/races/{{raceId}}/bets
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "bet_type_id": 4,
@@ -344,7 +344,7 @@ GET {{baseUrl}}/races/9999/bets
 
 ### [6-5] 存在しない bet_type_id → 404 確認
 POST {{baseUrl}}/races/{{raceId}}/bets
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "bet_type_id": 9999,
@@ -356,7 +356,7 @@ Content-Type: application/json
 
 ### [6-6] amount が 100 未満 → 422 確認
 POST {{baseUrl}}/races/{{raceId}}/bets
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "bet_type_id": 1,
@@ -373,7 +373,7 @@ GET {{baseUrl}}/bets/{{betId}}
 
 ### [6-8] 馬券部分更新（金額と買い目を変更）
 PATCH {{baseUrl}}/bets/{{betId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "amount": 2000,
@@ -384,7 +384,7 @@ Content-Type: application/json
 
 ### [6-9] 馬券部分更新（存在しない bet_type_id → 404 確認）
 PATCH {{baseUrl}}/bets/{{betId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "bet_type_id": 9999
@@ -394,7 +394,7 @@ Content-Type: application/json
 
 ### [6-10] 馬券部分更新（amount が 100 未満 → 422 確認）
 PATCH {{baseUrl}}/bets/{{betId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "amount": 50
@@ -420,7 +420,7 @@ GET {{baseUrl}}/bets/{{betId}}
 ### [7-1] レース結果登録
 # レスポンスの id を @resultId に設定してください
 POST {{baseUrl}}/races/{{raceId}}/result
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "order_of_finish": "3-5-2",
@@ -431,7 +431,7 @@ Content-Type: application/json
 
 ### [7-2] 既に存在する race_id への登録 → 400 確認
 POST {{baseUrl}}/races/{{raceId}}/result
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "total_return": 2000
@@ -452,7 +452,7 @@ GET {{baseUrl}}/races/9999/result
 
 ### [7-5] 存在しない race_id への結果登録 → 404 確認
 POST {{baseUrl}}/races/9999/result
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "total_return": 0
@@ -462,7 +462,7 @@ Content-Type: application/json
 
 ### [7-6] レース結果部分更新
 PATCH {{baseUrl}}/results/{{resultId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "order_of_finish": "3-5-2-1",
@@ -473,7 +473,7 @@ Content-Type: application/json
 
 ### [7-7] レース結果部分更新（total_return=0）
 PATCH {{baseUrl}}/results/{{resultId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "total_return": 0
@@ -483,7 +483,7 @@ Content-Type: application/json
 
 ### [7-8] レース結果部分更新（total_return=-1 → 422 確認）
 PATCH {{baseUrl}}/results/{{resultId}}
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 
 {
   "total_return": -1
@@ -521,3 +521,19 @@ GET {{baseUrl}}/stats/by-bet-type
 
 
 
+
+# =============================================================================
+# 9. デバッグ・データ修復
+# =============================================================================
+
+### [9-1] 文字化けデータ修復用（race_name, track_type）
+# ※ 自分の環境で化けているレースのIDを @raceId に指定して実行してください
+PATCH {{baseUrl}}/races/{{raceId}}
+Content-Type: application/json; charset=utf-8
+
+{
+  "race_name": "テストレース（修復済）",
+  "track_type": "芝"
+}
+
+###
