@@ -3,6 +3,7 @@ import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId, fetchPredictionsByR
 import type { StatsSummary, Race, Horse, Prediction, Bet, Result } from './types';
 import { StatsSummarySection } from './components/StatsSummarySection';
 import { RacesSection } from './components/RacesSection';
+import { RaceCreateForm } from './components/RaceCreateForm';
 import { HorsesSection } from './components/HorsesSection';
 import { PredictionsSection } from './components/PredictionsSection';
 import { BetsSection } from './components/BetsSection';
@@ -52,7 +53,10 @@ function App() {
       .finally(() => {
         setIsLoading(false);
       });
+  }, []);
 
+  const loadRaces = () => {
+    setIsRacesLoading(true);
     fetchRaces()
       .then((racesData) => {
         setRaces(racesData);
@@ -64,6 +68,10 @@ function App() {
       .finally(() => {
         setIsRacesLoading(false);
       });
+  };
+
+  useEffect(() => {
+    loadRaces();
   }, []);
 
   useEffect(() => {
@@ -136,6 +144,8 @@ function App() {
       
       <main className="app-main">
         <StatsSummarySection stats={data} isLoading={isLoading} error={error} />
+
+        <RaceCreateForm onSuccess={loadRaces} />
 
         <RacesSection 
           races={races} 

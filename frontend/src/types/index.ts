@@ -60,6 +60,17 @@ export interface Result {
   created_at: string;
 }
 
+export interface RaceCreate {
+  venue_id: number;
+  race_date: string;
+  race_number: number;
+  race_name: string | null;
+  grade: string | null;
+  distance: number | null;
+  track_type: string | null;
+}
+
+
 
 
 
