@@ -1,4 +1,4 @@
-import type { StatsSummary, Race, Horse, Prediction, Bet, Result, RaceCreate } from '../types';
+import type { StatsSummary, Race, Horse, Prediction, Bet, Result, RaceCreate, HorseCreate } from '../types';
 
 export const fetchStatsSummary = async (): Promise<StatsSummary> => {
   const response = await fetch('/api/v1/stats/summary');
@@ -73,6 +73,21 @@ export const createRace = async (data: RaceCreate): Promise<Race> => {
   }
   return response.json();
 };
+
+export const createHorse = async (raceId: number, data: HorseCreate): Promise<Horse> => {
+  const response = await fetch(`/api/v1/races/${raceId}/horses`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error('出走馬の登録に失敗しました');
+  }
+  return response.json();
+};
+
 
 
 

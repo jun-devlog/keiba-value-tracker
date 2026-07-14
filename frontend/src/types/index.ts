@@ -70,6 +70,15 @@ export interface RaceCreate {
   track_type: string | null;
 }
 
+export interface HorseCreate {
+  post_position: number;
+  horse_name: string;
+  jockey: string | null;
+  popularity: number | null;
+  odds: number | null;
+}
+
+
 
 
 

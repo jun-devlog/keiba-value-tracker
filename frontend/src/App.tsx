@@ -4,6 +4,7 @@ import type { StatsSummary, Race, Horse, Prediction, Bet, Result } from './types
 import { StatsSummarySection } from './components/StatsSummarySection';
 import { RacesSection } from './components/RacesSection';
 import { RaceCreateForm } from './components/RaceCreateForm';
+import { HorseCreateForm } from './components/HorseCreateForm';
 import { HorsesSection } from './components/HorsesSection';
 import { PredictionsSection } from './components/PredictionsSection';
 import { BetsSection } from './components/BetsSection';
@@ -74,6 +75,21 @@ function App() {
     loadRaces();
   }, []);
 
+  const loadHorses = (raceId: number) => {
+    setIsHorsesLoading(true);
+    setHorsesError(null);
+    fetchHorsesByRaceId(raceId)
+      .then((horsesData) => {
+        setHorses(horsesData);
+      })
+      .catch((err: Error) => {
+        setHorsesError(err.message);
+      })
+      .finally(() => {
+        setIsHorsesLoading(false);
+      });
+  };
+
   useEffect(() => {
     if (selectedRaceId === null) {
       setHorses([]);
@@ -83,18 +99,7 @@ function App() {
       return;
     }
 
-    setIsHorsesLoading(true);
-    fetchHorsesByRaceId(selectedRaceId)
-      .then((horsesData) => {
-        setHorses(horsesData);
-        setHorsesError(null);
-      })
-      .catch((err: Error) => {
-        setHorsesError(err.message);
-      })
-      .finally(() => {
-        setIsHorsesLoading(false);
-      });
+    loadHorses(selectedRaceId);
 
     setIsPredictionsLoading(true);
     fetchPredictionsByRaceId(selectedRaceId)
@@ -157,6 +162,7 @@ function App() {
 
         {selectedRaceId && (
           <>
+            <HorseCreateForm raceId={selectedRaceId} onSuccess={() => loadHorses(selectedRaceId)} />
             <HorsesSection horses={horses} isLoading={isHorsesLoading} error={horsesError} />
             <PredictionsSection predictions={predictions} isLoading={isPredictionsLoading} error={predictionsError} />
             <BetsSection bets={bets} isLoading={isBetsLoading} error={betsError} />
