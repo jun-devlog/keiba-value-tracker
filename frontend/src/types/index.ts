@@ -78,6 +78,14 @@ export interface HorseCreate {
   odds: number | null;
 }
 
+export interface PredictionCreate {
+  horse_id: number;
+  rank: number;
+  confidence: number | null;
+  memo: string | null;
+}
+
+
 
 
 
