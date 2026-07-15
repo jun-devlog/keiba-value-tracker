@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { createPrediction } from '../api/client';
-import type { PredictionCreate } from '../types';
+import type { PredictionCreate, Horse } from '../types';
 
 interface PredictionCreateFormProps {
   raceId: number;
+  horses: Horse[];
+  isHorsesLoading: boolean;
   onSuccess: () => void;
 }
 
-export function PredictionCreateForm({ raceId, onSuccess }: PredictionCreateFormProps) {
+export function PredictionCreateForm({ raceId, horses, isHorsesLoading, onSuccess }: PredictionCreateFormProps) {
   const [horseId, setHorseId] = useState<string>('');
   const [rank, setRank] = useState<string>('');
   const [confidence, setConfidence] = useState<string>('');
@@ -51,14 +53,22 @@ export function PredictionCreateForm({ raceId, onSuccess }: PredictionCreateForm
   return (
     <section className="form-section">
       <h2 className="section-title">予想登録</h2>
-      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1rem', paddingLeft: '0.5rem' }}>
-        ※出走馬IDは上のHorses一覧に表示されているIDを入力してください。
-      </p>
       <form className="race-form" onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="form-group">
-            <label>出走馬ID (必須)</label>
-            <input type="number" value={horseId} onChange={e => setHorseId(e.target.value)} placeholder="例: 10" required />
+            <label>出走馬 (必須)</label>
+            <select value={horseId} onChange={e => setHorseId(e.target.value)} required disabled={isHorsesLoading || horses.length === 0}>
+              <option value="" disabled>出走馬を選択してください</option>
+              {isHorsesLoading ? (
+                <option disabled>出走馬を読み込み中...</option>
+              ) : horses.length === 0 ? (
+                <option disabled>出走馬が登録されていません</option>
+              ) : (
+                horses.map(h => (
+                  <option key={h.id} value={h.id}>{h.post_position} - {h.horse_name}</option>
+                ))
+              )}
+            </select>
           </div>
           <div className="form-group">
             <label>予想順位 (必須)</label>
@@ -79,7 +89,7 @@ export function PredictionCreateForm({ raceId, onSuccess }: PredictionCreateForm
         {error && <div className="form-error">{error}</div>}
 
         <div className="form-actions">
-          <button type="submit" className="submit-button" disabled={isLoading}>
+          <button type="submit" className="submit-button" disabled={isHorsesLoading || horses.length === 0 || isLoading}>
             {isLoading ? '登録中...' : '登録する'}
           </button>
         </div>

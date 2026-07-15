@@ -181,7 +181,7 @@ function App() {
           <>
             <HorseCreateForm raceId={selectedRaceId} onSuccess={() => loadHorses(selectedRaceId)} />
             <HorsesSection horses={horses} isLoading={isHorsesLoading} error={horsesError} />
-            <PredictionCreateForm raceId={selectedRaceId} onSuccess={() => loadPredictions(selectedRaceId)} />
+            <PredictionCreateForm raceId={selectedRaceId} horses={horses} isHorsesLoading={isHorsesLoading} onSuccess={() => loadPredictions(selectedRaceId)} />
             <PredictionsSection predictions={predictions} isLoading={isPredictionsLoading} error={predictionsError} />
             <BetCreateForm raceId={selectedRaceId} onSuccess={() => loadBets(selectedRaceId)} />
             <BetsSection bets={bets} isLoading={isBetsLoading} error={betsError} />
