@@ -101,6 +101,12 @@ export interface Venue {
   name: string;
 }
 
+export interface BetType {
+  id: number;
+  name: string;
+}
+
+
 
 
 

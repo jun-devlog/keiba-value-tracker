@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { createBet } from '../api/client';
-import type { BetCreate } from '../types';
+import { useState, useEffect } from 'react';
+import { createBet, fetchBetTypes } from '../api/client';
+import type { BetCreate, BetType } from '../types';
 
 interface BetCreateFormProps {
   raceId: number;
@@ -12,8 +12,19 @@ export function BetCreateForm({ raceId, onSuccess }: BetCreateFormProps) {
   const [amount, setAmount] = useState<string>('');
   const [combination, setCombination] = useState<string>('');
 
+  const [betTypes, setBetTypes] = useState<BetType[]>([]);
+  const [isBetTypesLoading, setIsBetTypesLoading] = useState<boolean>(true);
+  const [betTypesError, setBetTypesError] = useState<string | null>(null);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchBetTypes()
+      .then(setBetTypes)
+      .catch((err: Error) => setBetTypesError(err.message))
+      .finally(() => setIsBetTypesLoading(false));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +66,14 @@ export function BetCreateForm({ raceId, onSuccess }: BetCreateFormProps) {
         <div className="form-row">
           <div className="form-group">
             <label>券種ID (必須)</label>
-            <input type="number" value={betTypeId} onChange={e => setBetTypeId(e.target.value)} placeholder="例: 1" required />
+            <select value={betTypeId} onChange={e => setBetTypeId(e.target.value)} required>
+              <option value="" disabled>券種を選択してください</option>
+              {isBetTypesLoading && <option disabled>券種を取得中...</option>}
+              {betTypesError && <option disabled>エラーが発生しました</option>}
+              {!isBetTypesLoading && !betTypesError && betTypes.map(bt => (
+                <option key={bt.id} value={bt.id}>{bt.name}</option>
+              ))}
+            </select>
           </div>
           <div className="form-group">
             <label>金額 (必須)</label>
@@ -68,9 +86,10 @@ export function BetCreateForm({ raceId, onSuccess }: BetCreateFormProps) {
         </div>
 
         {error && <div className="form-error">{error}</div>}
+        {betTypesError && <div className="form-error">券種マスタの取得に失敗しました: {betTypesError}</div>}
 
         <div className="form-actions">
-          <button type="submit" className="submit-button" disabled={isLoading}>
+          <button type="submit" className="submit-button" disabled={isBetTypesLoading || !!betTypesError || betTypes.length === 0 || isLoading}>
             {isLoading ? '登録中...' : '登録する'}
           </button>
         </div>
