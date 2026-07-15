@@ -8,6 +8,7 @@ import { HorseCreateForm } from './components/HorseCreateForm';
 import { HorsesSection } from './components/HorsesSection';
 import { PredictionCreateForm } from './components/PredictionCreateForm';
 import { PredictionsSection } from './components/PredictionsSection';
+import { BetCreateForm } from './components/BetCreateForm';
 import { BetsSection } from './components/BetsSection';
 import { ResultSection } from './components/ResultSection';
 import './App.css';
@@ -106,6 +107,21 @@ function App() {
       });
   };
 
+  const loadBets = (raceId: number) => {
+    setIsBetsLoading(true);
+    setBetsError(null);
+    fetchBetsByRaceId(raceId)
+      .then((betsData) => {
+        setBets(betsData);
+      })
+      .catch((err: Error) => {
+        setBetsError(err.message);
+      })
+      .finally(() => {
+        setIsBetsLoading(false);
+      });
+  };
+
   useEffect(() => {
     if (selectedRaceId === null) {
       setHorses([]);
@@ -117,19 +133,7 @@ function App() {
 
     loadHorses(selectedRaceId);
     loadPredictions(selectedRaceId);
-
-    setIsBetsLoading(true);
-    fetchBetsByRaceId(selectedRaceId)
-      .then((betsData) => {
-        setBets(betsData);
-        setBetsError(null);
-      })
-      .catch((err: Error) => {
-        setBetsError(err.message);
-      })
-      .finally(() => {
-        setIsBetsLoading(false);
-      });
+    loadBets(selectedRaceId);
 
     setIsResultLoading(true);
     fetchResultByRaceId(selectedRaceId)
@@ -170,6 +174,7 @@ function App() {
             <HorsesSection horses={horses} isLoading={isHorsesLoading} error={horsesError} />
             <PredictionCreateForm raceId={selectedRaceId} onSuccess={() => loadPredictions(selectedRaceId)} />
             <PredictionsSection predictions={predictions} isLoading={isPredictionsLoading} error={predictionsError} />
+            <BetCreateForm raceId={selectedRaceId} onSuccess={() => loadBets(selectedRaceId)} />
             <BetsSection bets={bets} isLoading={isBetsLoading} error={betsError} />
             <ResultSection result={result} isLoading={isResultLoading} error={resultError} />
           </>

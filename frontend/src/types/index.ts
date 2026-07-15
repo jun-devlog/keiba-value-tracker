@@ -85,6 +85,13 @@ export interface PredictionCreate {
   memo: string | null;
 }
 
+export interface BetCreate {
+  bet_type_id: number;
+  amount: number;
+  combination: string | null;
+}
+
+
 
 
 
