@@ -1,4 +1,4 @@
-import type { StatsSummary, Race, Horse, Prediction, Bet, Result, RaceCreate, HorseCreate, PredictionCreate, BetCreate } from '../types';
+import type { StatsSummary, Race, Horse, Prediction, Bet, Result, RaceCreate, HorseCreate, PredictionCreate, BetCreate, ResultCreate } from '../types';
 
 export const fetchStatsSummary = async (): Promise<StatsSummary> => {
   const response = await fetch('/api/v1/stats/summary');
@@ -115,6 +115,25 @@ export const createBet = async (raceId: number, data: BetCreate): Promise<Bet> =
   }
   return response.json();
 };
+
+export const createResult = async (raceId: number, data: ResultCreate): Promise<Result> => {
+  const response = await fetch(`/api/v1/races/${raceId}/result`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    if (response.status === 400) {
+      const errData = await response.json().catch(() => null);
+      throw new Error(errData?.detail || 'レース結果の登録に失敗しました（データ重複の可能性があります）');
+    }
+    throw new Error('レース結果の登録に失敗しました');
+  }
+  return response.json();
+};
+
 
 
 

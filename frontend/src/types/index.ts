@@ -91,6 +91,12 @@ export interface BetCreate {
   combination: string | null;
 }
 
+export interface ResultCreate {
+  order_of_finish: string;
+  total_return: number;
+}
+
+
 
 
 
