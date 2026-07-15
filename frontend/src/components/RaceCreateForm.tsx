@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { createRace } from '../api/client';
-import type { RaceCreate } from '../types';
+import { useState, useEffect } from 'react';
+import { createRace, fetchVenues } from '../api/client';
+import type { RaceCreate, Venue } from '../types';
 
 interface RaceCreateFormProps {
   onSuccess: () => void;
@@ -14,9 +14,20 @@ export function RaceCreateForm({ onSuccess }: RaceCreateFormProps) {
   const [grade, setGrade] = useState<string>('');
   const [distance, setDistance] = useState<string>('');
   const [trackType, setTrackType] = useState<string>('');
+
+  const [venues, setVenues] = useState<Venue[]>([]);
+  const [isVenuesLoading, setIsVenuesLoading] = useState<boolean>(true);
+  const [venuesError, setVenuesError] = useState<string | null>(null);
   
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchVenues()
+      .then(setVenues)
+      .catch((err: Error) => setVenuesError(err.message))
+      .finally(() => setIsVenuesLoading(false));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +78,14 @@ export function RaceCreateForm({ onSuccess }: RaceCreateFormProps) {
           </div>
           <div className="form-group">
             <label>会場ID (必須)</label>
-            <input type="number" value={venueId} onChange={e => setVenueId(e.target.value)} placeholder="例: 1" required />
+            <select value={venueId} onChange={e => setVenueId(e.target.value)} required>
+              <option value="" disabled>会場を選択してください</option>
+              {isVenuesLoading && <option disabled>会場を取得中...</option>}
+              {venuesError && <option disabled>エラーが発生しました</option>}
+              {!isVenuesLoading && !venuesError && venues.map(v => (
+                <option key={v.id} value={v.id}>{v.name}</option>
+              ))}
+            </select>
           </div>
           <div className="form-group">
             <label>R (必須)</label>
@@ -94,9 +112,10 @@ export function RaceCreateForm({ onSuccess }: RaceCreateFormProps) {
         </div>
 
         {error && <div className="form-error">{error}</div>}
+        {venuesError && <div className="form-error">会場マスタの取得に失敗しました: {venuesError}</div>}
 
         <div className="form-actions">
-          <button type="submit" className="submit-button" disabled={isLoading}>
+          <button type="submit" className="submit-button" disabled={isVenuesLoading || !!venuesError || venues.length === 0 || isLoading}>
             {isLoading ? '登録中...' : '登録する'}
           </button>
         </div>

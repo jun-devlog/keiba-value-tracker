@@ -96,6 +96,12 @@ export interface ResultCreate {
   total_return: number;
 }
 
+export interface Venue {
+  id: number;
+  name: string;
+}
+
+
 
 
 
