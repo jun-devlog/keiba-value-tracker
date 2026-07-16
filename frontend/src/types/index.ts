@@ -88,6 +88,14 @@ export interface HorseCreate {
   odds: number | null;
 }
 
+export interface HorseUpdate {
+  post_position?: number;
+  horse_name?: string;
+  jockey?: string | null;
+  popularity?: number | null;
+  odds?: number | null;
+}
+
 export interface PredictionCreate {
   horse_id: number;
   rank: number;
