@@ -379,3 +379,38 @@ body {
   margin-top: 0.5rem;
 }
 
+/* Race action buttons (edit / delete) */
+.race-action-btn {
+  border: none;
+  border-radius: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: 0.4rem;
+}
+
+.race-action-btn:last-child {
+  margin-right: 0;
+}
+
+.race-action-btn--edit {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.race-action-btn--edit:hover {
+  background: rgba(59, 130, 246, 0.35);
+}
+
+.race-action-btn--delete {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.race-action-btn--delete:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
