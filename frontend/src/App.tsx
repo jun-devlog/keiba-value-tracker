@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId, fetchPredictionsByRaceId, fetchBetsByRaceId, fetchResultByRaceId } from './api/client';
-import type { StatsSummary, Race, Horse, Prediction, Bet, Result } from './types';
+import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId, fetchPredictionsByRaceId, fetchBetsByRaceId, fetchResultByRaceId, updateRace, deleteRace } from './api/client';
+import type { StatsSummary, Race, Horse, Prediction, Bet, Result, RaceUpdate } from './types';
 import { StatsSummarySection } from './components/StatsSummarySection';
 import { RacesSection } from './components/RacesSection';
 import { RaceCreateForm } from './components/RaceCreateForm';
@@ -143,6 +143,19 @@ function App() {
       });
   };
 
+  const handleUpdateRace = async (raceId: number, data: RaceUpdate) => {
+    await updateRace(raceId, data);
+    loadRaces();
+  };
+
+  const handleDeleteRace = async (raceId: number) => {
+    await deleteRace(raceId);
+    if (selectedRaceId === raceId) {
+      setSelectedRaceId(null);
+    }
+    loadRaces();
+  };
+
   useEffect(() => {
     if (selectedRaceId === null) {
       setHorses([]);
@@ -175,6 +188,8 @@ function App() {
           error={racesError} 
           selectedRaceId={selectedRaceId} 
           onRaceSelect={setSelectedRaceId} 
+          onUpdateRace={handleUpdateRace}
+          onDeleteRace={handleDeleteRace}
         />
 
         {selectedRaceId && (

@@ -70,6 +70,16 @@ export interface RaceCreate {
   track_type: string | null;
 }
 
+export interface RaceUpdate {
+  venue_id?: number;
+  race_date?: string;
+  race_number?: number;
+  race_name?: string | null;
+  grade?: string | null;
+  distance?: number | null;
+  track_type?: string | null;
+}
+
 export interface HorseCreate {
   post_position: number;
   horse_name: string;
