@@ -233,17 +233,17 @@ function App() {
 
   return (
     <div className="app-container">
-      <header className="app-header">
-        <div className="app-header-title">
-          <h1>Keiba Value Tracker</h1>
-          <span className="badge-version">v0.3.0 MVP</span>
-        </div>
-      </header>
-
       {!showDashboard ? (
         <LandingPage onEnter={() => setShowDashboard(true)} />
       ) : (
-        <main className="app-main">
+        <>
+          <header className="app-header">
+            <div className="app-header-title">
+              <h1>Keiba Value Tracker</h1>
+              <span className="badge-version">v0.3.0 MVP</span>
+            </div>
+          </header>
+          <main className="app-main">
           <StatsSummarySection stats={data} isLoading={isLoading} error={error} />
 
           <RaceCreateForm onSuccess={loadRaces} />
@@ -276,7 +276,8 @@ function App() {
               <ResultSection result={result} isLoading={isResultLoading} error={resultError} onUpdateResult={handleUpdateResult} onDeleteResult={handleDeleteResult} />
             </div>
           )}
-        </main>
+          </main>
+        </>
       )}
     </div>
   );

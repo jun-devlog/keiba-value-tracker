@@ -1,70 +1,148 @@
-
 interface LandingPageProps {
   onEnter: () => void;
 }
 
 export function LandingPage({ onEnter }: LandingPageProps) {
   return (
-    <div className="lp-container">
-      {/* Hero Section */}
-      <header className="lp-hero">
-        <h1 className="lp-title">Keiba Value Tracker</h1>
-        <p className="lp-catchphrase">
-          競馬の予想・馬券購入・レース結果をまとめて記録し、収支と回収率を見える化するダッシュボード。
-        </p>
-        <p className="lp-subcopy">
-          Excelやメモ帳では続きにくい収支管理を、もっと振り返りやすく。
-        </p>
-        <button className="lp-cta-primary" onClick={onEnter}>
-          デモ画面を試す
-        </button>
+    <div className="lp-shell">
+      {/* プレミアムな質感の背景要素 */}
+      <div className="lp-bg-image"></div>
+      <div className="lp-bg-glow"></div>
+      <div className="lp-bg-grid"></div>
+
+      {/* LP専用ヘッダー */}
+      <header className="lp-header">
+        <div className="lp-brand">
+          <span className="lp-brand-name">Keiba Value Tracker</span>
+          <span className="lp-brand-badge">Beta</span>
+        </div>
+        <nav className="lp-nav">
+          <button className="lp-nav-btn" onClick={onEnter}>デモを見る</button>
+          <a href="https://x.com/jun_devlog" target="_blank" rel="noreferrer" className="lp-nav-link">Xでフィードバック</a>
+        </nav>
       </header>
 
-      {/* Target Audience Section */}
-      <section className="lp-section">
-        <h2 className="lp-section-title">こんな方におすすめ</h2>
-        <ul className="lp-target-list">
-          <li>競馬の収支をなんとなくしか把握できていない人</li>
-          <li>券種ごとの勝ち負けや、自分の買い方のクセを振り返りたい人</li>
-          <li>Excelやメモ帳で管理しようとしたが続かなかった人</li>
-        </ul>
-      </section>
+      <main className="lp-main">
+        {/* Hero Section */}
+        <section className="lp-hero">
+          <div className="lp-hero-copy">
+            <h1 className="lp-hero-title">競馬の記録を、<br />資産に変える。</h1>
+            <p className="lp-hero-subtitle">
+              予想・馬券購入・レース結果をひとつにまとめ、Profit / ROI / 買い方の傾向を可視化する競馬ダッシュボード。
+            </p>
+            <p className="lp-hero-description">
+              Excelやメモ帳では続きにくい収支管理を、もっと振り返りやすく。
+            </p>
+            <div className="lp-hero-actions">
+              <button className="lp-button-primary" onClick={onEnter}>
+                デモ画面を試す
+              </button>
+              <a href="https://x.com/jun_devlog" target="_blank" rel="noreferrer" className="lp-button-secondary">
+                Xでフィードバックする
+              </a>
+            </div>
+          </div>
 
-      {/* Value Proposition Section */}
-      <section className="lp-section">
-        <h2 className="lp-section-title">主な価値</h2>
-        <div className="lp-features-grid">
-          <div className="lp-feature-card">
-            <h3>一元管理</h3>
-            <p>レースごとに予想・購入・結果をまとめて記録</p>
+          <div className="lp-hero-visual">
+            <div className="lp-kpi-preview">
+              <div className="lp-preview-card">
+                <span className="lp-preview-label">Total Bet</span>
+                <span className="lp-preview-value">¥1,500</span>
+              </div>
+              <div className="lp-preview-card">
+                <span className="lp-preview-label">Total Return</span>
+                <span className="lp-preview-value color-highlight">¥2,800</span>
+              </div>
+              <div className="lp-preview-card">
+                <span className="lp-preview-label">Profit</span>
+                <span className="lp-preview-value color-positive">+¥1,300</span>
+              </div>
+              <div className="lp-preview-card">
+                <span className="lp-preview-label">ROI</span>
+                <span className="lp-preview-value color-positive">186.7%</span>
+              </div>
+            </div>
+            
+            <div className="lp-preview-race">
+              <div className="lp-preview-race-header">
+                <span className="lp-preview-race-title">日本ダービー</span>
+                <span className="lp-preview-race-grade">G1</span>
+              </div>
+              <div className="lp-preview-race-result">
+                <span>Result:</span>
+                <span className="lp-preview-race-order">1-2-3</span>
+              </div>
+            </div>
           </div>
-          <div className="lp-feature-card">
-            <h3>自動集計</h3>
-            <p>登録するだけで Profit / ROI を自動で見える化</p>
-          </div>
-          <div className="lp-feature-card">
-            <h3>振り返り</h3>
-            <p>後から自分の判断を振り返りやすい専用UI</p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Pricing Hypothesis & CTA Section */}
-      <section className="lp-section lp-cta-section">
-        <h2 className="lp-section-title">料金・今後の予定</h2>
-        <div className="lp-pricing-card">
-          <p className="lp-pricing-beta">β版は無料</p>
-          <p className="lp-pricing-future">将来的には買い切り980円、または月額300円程度での提供を検討しています。</p>
-        </div>
-        
-        <div className="lp-contact-box">
-          <p>競馬の収支管理で困っていることを教えてください。</p>
-          <p>本格的に使ってみたい方は、XでDMください。</p>
-          <a href="https://x.com/jun_devlog" className="lp-cta-secondary" target="_blank" rel="noreferrer">
-            XでDMを送る
-          </a>
-        </div>
-      </section>
+        {/* Target Audience Section */}
+        <section className="lp-section">
+          <h2 className="lp-section-title">こんな方におすすめ</h2>
+          <div className="lp-card-grid">
+            <div className="lp-card">
+              <div className="lp-card-icon">📊</div>
+              <h3 className="lp-card-title">収支を把握したい</h3>
+              <p className="lp-card-text">
+                なんとなく勝っている/負けている状態から、数字で振り返れるようにする
+              </p>
+            </div>
+            <div className="lp-card">
+              <div className="lp-card-icon">🎯</div>
+              <h3 className="lp-card-title">買い方を振り返りたい</h3>
+              <p className="lp-card-text">
+                券種やレースごとの記録から、自分の判断を見直しやすくする
+              </p>
+            </div>
+            <div className="lp-card">
+              <div className="lp-card-icon">📓</div>
+              <h3 className="lp-card-title">管理を続けたい</h3>
+              <p className="lp-card-text">
+                Excelやメモ帳よりも、競馬専用のUIで記録を続けやすくする
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Value Proposition Section */}
+        <section className="lp-section">
+          <h2 className="lp-section-title">主な価値</h2>
+          <div className="lp-card-grid">
+            <div className="lp-card lp-card-highlight">
+              <h3 className="lp-card-title">一元管理</h3>
+              <p className="lp-card-text">レースごとに予想・購入・結果をまとめて記録</p>
+            </div>
+            <div className="lp-card lp-card-highlight">
+              <h3 className="lp-card-title">自動集計</h3>
+              <p className="lp-card-text">登録するだけで Profit / ROI を自動で見える化</p>
+            </div>
+            <div className="lp-card lp-card-highlight">
+              <h3 className="lp-card-title">振り返り</h3>
+              <p className="lp-card-text">後から自分の判断を振り返りやすい専用UI</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing & CTA Section */}
+        <section className="lp-section lp-cta-section">
+          <div className="lp-cta-content">
+            <h2 className="lp-section-title">料金・今後の予定</h2>
+            <p className="lp-cta-text">
+              現在はβ版として無料公開を検討中です。<br />
+              将来的には、買い切り980円、または月額300円程度での提供を検証しています。<br />
+              競馬の収支管理で困っていることがあれば、ぜひXで教えてください。
+            </p>
+            <div className="lp-cta-actions">
+              <button className="lp-button-primary" onClick={onEnter}>
+                デモ画面を試す
+              </button>
+              <a href="https://x.com/jun_devlog" target="_blank" rel="noreferrer" className="lp-button-secondary">
+                Xでフィードバックする
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
 
       <footer className="lp-footer">
         <p>&copy; {new Date().getFullYear()} Keiba Value Tracker. All rights reserved.</p>
