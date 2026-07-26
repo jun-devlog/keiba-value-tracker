@@ -231,7 +231,10 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1>Keiba Value Tracker</h1>
+        <div className="app-header-title">
+          <h1>Keiba Value Tracker</h1>
+          <span className="badge-version">v0.3.0 MVP</span>
+        </div>
       </header>
       
       <main className="app-main">
@@ -250,7 +253,7 @@ function App() {
         />
 
         {selectedRaceId && (
-          <>
+          <div className="details-area">
             <HorseCreateForm raceId={selectedRaceId} onSuccess={() => loadHorses(selectedRaceId)} />
             <HorsesSection
               horses={horses}
@@ -265,7 +268,7 @@ function App() {
             <BetsSection bets={bets} isLoading={isBetsLoading} error={betsError} onUpdateBet={handleUpdateBet} onDeleteBet={handleDeleteBet} />
             <ResultCreateForm raceId={selectedRaceId} onSuccess={() => { loadResult(selectedRaceId); loadStats(); }} />
             <ResultSection result={result} isLoading={isResultLoading} error={resultError} onUpdateResult={handleUpdateResult} onDeleteResult={handleDeleteResult} />
-          </>
+          </div>
         )}
       </main>
     </div>

@@ -20,34 +20,35 @@ export function BetsSection({ bets, isLoading, error, onUpdateBet, onDeleteBet }
       <h2 className="section-title">Bets</h2>
 
       {isLoading && (
-        <div className="loading-state">
+        <div className="state-container">
           <div className="spinner"></div>
           <p>馬券購入情報を読み込み中...</p>
         </div>
       )}
 
       {error && (
-        <div className="error-state">
+        <div className="state-container error">
           <p>Error: {error}</p>
         </div>
       )}
 
       {deleteError && (
-        <div className="error-state">
+        <div className="state-container error">
           <p>{deleteError}</p>
         </div>
       )}
 
       {!isLoading && !error && bets.length === 0 && (
-        <div className="empty-state">
+        <div className="state-container">
           <p>馬券購入履歴が登録されていません</p>
         </div>
       )}
 
       {!isLoading && !error && bets.length > 0 && (
-        <div className="horses-list">
-          <table className="races-table">
-            <thead>
+        <div className="data-section">
+          <div className="data-table-wrapper">
+            <table className="data-table">
+              <thead>
               <tr>
                 <th>券種ID</th>
                 <th>金額</th>
@@ -60,7 +61,7 @@ export function BetsSection({ bets, isLoading, error, onUpdateBet, onDeleteBet }
               {bets.map((bet) => {
                 if (editingBetId === bet.id) {
                   return (
-                    <tr key={bet.id}>
+                    <tr key={bet.id} className="inline-edit-row">
                       <td colSpan={5}>
                         <BetUpdateForm
                           bet={bet}
@@ -107,12 +108,11 @@ export function BetsSection({ bets, isLoading, error, onUpdateBet, onDeleteBet }
                   </tr>
                 );
               })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </section>
   );
 }
-
-

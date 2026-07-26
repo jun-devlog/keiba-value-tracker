@@ -19,34 +19,35 @@ export function HorsesSection({ horses, isLoading, error, onUpdateHorse, onDelet
       <h2 className="section-title">Horses</h2>
 
       {isLoading && (
-        <div className="loading-state">
+        <div className="state-container">
           <div className="spinner"></div>
           <p>出走馬情報を読み込み中...</p>
         </div>
       )}
 
       {error && (
-        <div className="error-state">
+        <div className="state-container error">
           <p>Error: {error}</p>
         </div>
       )}
 
       {deleteError && (
-        <div className="error-state">
+        <div className="state-container error">
           <p>{deleteError}</p>
         </div>
       )}
 
       {!isLoading && !error && horses.length === 0 && (
-        <div className="empty-state">
+        <div className="state-container">
           <p>出走馬が登録されていません</p>
         </div>
       )}
 
       {!isLoading && !error && horses.length > 0 && (
-        <div className="horses-list">
-          <table className="races-table">
-            <thead>
+        <div className="data-section">
+          <div className="data-table-wrapper">
+            <table className="data-table">
+              <thead>
               <tr>
                 <th>馬番</th>
                 <th>馬名</th>
@@ -60,7 +61,7 @@ export function HorsesSection({ horses, isLoading, error, onUpdateHorse, onDelet
               {horses.map((horse) => {
                 if (editingHorseId === horse.id) {
                   return (
-                    <tr key={horse.id}>
+                    <tr key={horse.id} className="inline-edit-row">
                       <td colSpan={6}>
                         <HorseUpdateForm
                           horse={horse}
@@ -108,8 +109,9 @@ export function HorsesSection({ horses, isLoading, error, onUpdateHorse, onDelet
                   </tr>
                 );
               })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </section>

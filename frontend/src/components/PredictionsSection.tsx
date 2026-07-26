@@ -21,34 +21,35 @@ export function PredictionsSection({ predictions, isLoading, error, horses, onUp
       <h2 className="section-title">Predictions</h2>
 
       {isLoading && (
-        <div className="loading-state">
+        <div className="state-container">
           <div className="spinner"></div>
           <p>予想情報を読み込み中...</p>
         </div>
       )}
 
       {error && (
-        <div className="error-state">
+        <div className="state-container error">
           <p>Error: {error}</p>
         </div>
       )}
 
       {deleteError && (
-        <div className="error-state">
+        <div className="state-container error">
           <p>{deleteError}</p>
         </div>
       )}
 
       {!isLoading && !error && predictions.length === 0 && (
-        <div className="empty-state">
+        <div className="state-container">
           <p>予想が登録されていません</p>
         </div>
       )}
 
       {!isLoading && !error && predictions.length > 0 && (
-        <div className="horses-list">
-          <table className="races-table">
-            <thead>
+        <div className="data-section">
+          <div className="data-table-wrapper">
+            <table className="data-table">
+              <thead>
               <tr>
                 <th>印</th>
                 <th>順位</th>
@@ -62,7 +63,7 @@ export function PredictionsSection({ predictions, isLoading, error, horses, onUp
               {predictions.map((prediction) => {
                 if (editingPredictionId === prediction.id) {
                   return (
-                    <tr key={prediction.id}>
+                    <tr key={prediction.id} className="inline-edit-row">
                       <td colSpan={6}>
                         <PredictionUpdateForm
                           prediction={prediction}
@@ -116,11 +117,11 @@ export function PredictionsSection({ predictions, isLoading, error, horses, onUp
                   </tr>
                 );
               })}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </section>
   );
 }
-

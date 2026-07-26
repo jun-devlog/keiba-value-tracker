@@ -11,7 +11,7 @@ export function StatsSummarySection({ stats, isLoading, error }: StatsSummarySec
   if (isLoading) {
     return (
       <section className="stats-section">
-        <div className="loading-state">
+        <div className="state-container">
           <div className="spinner"></div>
           <p>データを読み込み中...</p>
         </div>
@@ -22,7 +22,7 @@ export function StatsSummarySection({ stats, isLoading, error }: StatsSummarySec
   if (error) {
     return (
       <section className="stats-section">
-        <div className="error-state">
+        <div className="state-container error">
           <p>Error: {error}</p>
         </div>
       </section>
@@ -40,17 +40,17 @@ export function StatsSummarySection({ stats, isLoading, error }: StatsSummarySec
         </div>
         <div className="stat-card">
           <h3>Total Return</h3>
-          <p className="stat-value highlight">{formatCurrency(stats.total_return)}</p>
+          <p className="stat-value color-highlight">{formatCurrency(stats.total_return)}</p>
         </div>
         <div className="stat-card">
           <h3>Profit</h3>
-          <p className={`stat-value ${stats.profit >= 0 ? 'highlight' : 'negative'}`}>
+          <p className={`stat-value ${stats.profit > 0 ? 'color-positive' : stats.profit < 0 ? 'color-negative' : 'color-neutral'}`}>
             {formatCurrency(stats.profit)}
           </p>
         </div>
         <div className="stat-card">
           <h3>ROI</h3>
-          <p className={`stat-value ${stats.roi && stats.roi >= 100 ? 'highlight' : ''}`}>
+          <p className={`stat-value ${stats.roi && stats.roi >= 100 ? 'color-positive' : 'color-neutral'}`}>
             {formatPercent(stats.roi)}
           </p>
         </div>
