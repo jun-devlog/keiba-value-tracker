@@ -116,6 +116,12 @@ export interface BetCreate {
   combination: string | null;
 }
 
+export interface BetUpdate {
+  bet_type_id?: number;
+  amount?: number;
+  combination?: string | null;
+}
+
 export interface ResultCreate {
   order_of_finish: string;
   total_return: number;
