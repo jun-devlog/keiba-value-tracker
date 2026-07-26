@@ -103,6 +103,13 @@ export interface PredictionCreate {
   memo: string | null;
 }
 
+export interface PredictionUpdate {
+  horse_id?: number;
+  rank?: number | null;
+  confidence?: number | null;
+  memo?: string | null;
+}
+
 export interface BetCreate {
   bet_type_id: number;
   amount: number;
