@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId, fetchPredictionsByRaceId, fetchBetsByRaceId, fetchResultByRaceId, updateRace, deleteRace, updateHorse, deleteHorse, updatePrediction, deletePrediction, updateBet, deleteBet } from './api/client';
-import type { StatsSummary, Race, Horse, Prediction, Bet, Result, RaceUpdate, HorseUpdate, PredictionUpdate, BetUpdate } from './types';
+import { fetchStatsSummary, fetchRaces, fetchHorsesByRaceId, fetchPredictionsByRaceId, fetchBetsByRaceId, fetchResultByRaceId, updateRace, deleteRace, updateHorse, deleteHorse, updatePrediction, deletePrediction, updateBet, deleteBet, updateResult, deleteResult } from './api/client';
+import type { StatsSummary, Race, Horse, Prediction, Bet, Result, RaceUpdate, HorseUpdate, PredictionUpdate, BetUpdate, ResultUpdate } from './types';
 import { StatsSummarySection } from './components/StatsSummarySection';
 import { RacesSection } from './components/RacesSection';
 import { RaceCreateForm } from './components/RaceCreateForm';
@@ -197,6 +197,22 @@ function App() {
     loadStats();
   };
 
+  const handleUpdateResult = async (resultId: number, data: ResultUpdate) => {
+    await updateResult(resultId, data);
+    if (selectedRaceId) {
+      loadResult(selectedRaceId);
+    }
+    loadStats();
+  };
+
+  const handleDeleteResult = async (resultId: number) => {
+    await deleteResult(resultId);
+    if (selectedRaceId) {
+      loadResult(selectedRaceId);
+    }
+    loadStats();
+  };
+
   useEffect(() => {
     if (selectedRaceId === null) {
       setHorses([]);
@@ -248,7 +264,7 @@ function App() {
             <BetCreateForm raceId={selectedRaceId} onSuccess={() => loadBets(selectedRaceId)} />
             <BetsSection bets={bets} isLoading={isBetsLoading} error={betsError} onUpdateBet={handleUpdateBet} onDeleteBet={handleDeleteBet} />
             <ResultCreateForm raceId={selectedRaceId} onSuccess={() => { loadResult(selectedRaceId); loadStats(); }} />
-            <ResultSection result={result} isLoading={isResultLoading} error={resultError} />
+            <ResultSection result={result} isLoading={isResultLoading} error={resultError} onUpdateResult={handleUpdateResult} onDeleteResult={handleDeleteResult} />
           </>
         )}
       </main>

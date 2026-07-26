@@ -127,6 +127,11 @@ export interface ResultCreate {
   total_return: number;
 }
 
+export interface ResultUpdate {
+  order_of_finish?: string | null;
+  total_return?: number;
+}
+
 export interface Venue {
   id: number;
   name: string;

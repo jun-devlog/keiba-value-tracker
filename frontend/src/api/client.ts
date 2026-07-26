@@ -1,4 +1,4 @@
-import type { StatsSummary, Race, Horse, Prediction, Bet, Result, RaceCreate, RaceUpdate, HorseCreate, HorseUpdate, PredictionCreate, PredictionUpdate, BetCreate, BetUpdate, ResultCreate, Venue, BetType } from '../types';
+import type { StatsSummary, Race, Horse, Prediction, Bet, Result, RaceCreate, RaceUpdate, HorseCreate, HorseUpdate, PredictionCreate, PredictionUpdate, BetCreate, BetUpdate, ResultCreate, ResultUpdate, Venue, BetType } from '../types';
 
 export const fetchStatsSummary = async (): Promise<StatsSummary> => {
   const response = await fetch('/api/v1/stats/summary');
@@ -238,5 +238,28 @@ export const deleteBet = async (betId: number): Promise<void> => {
   });
   if (!response.ok) {
     throw new Error('馬券の削除に失敗しました');
+  }
+};
+
+export const updateResult = async (resultId: number, data: ResultUpdate): Promise<Result> => {
+  const response = await fetch(`/api/v1/results/${resultId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error('レース結果の更新に失敗しました');
+  }
+  return response.json();
+};
+
+export const deleteResult = async (resultId: number): Promise<void> => {
+  const response = await fetch(`/api/v1/results/${resultId}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error('レース結果の削除に失敗しました');
   }
 };
