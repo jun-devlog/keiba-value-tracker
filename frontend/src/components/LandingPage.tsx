@@ -276,12 +276,36 @@ export function LandingPage({ onEnter }: LandingPageProps) {
             </div>
             
             <div className="lp-pricing-actions">
-              <a href="https://x.com/jun_devlog" target="_blank" rel="noreferrer" className="lp-button-blue-full">
-                Xでフィードバックする
-              </a>
-              <button className="lp-button-dark-full" onClick={onEnter}>
-                デモ画面を試す <span className="arrow">→</span>
-              </button>
+              <form action="https://formspree.io/f/mvzevnvj" method="POST" className="lp-beta-form">
+                <div className="lp-form-group">
+                  <label htmlFor="email" className="lp-form-label">メールアドレス <span className="lp-form-required">*</span></label>
+                  <input type="email" name="email" id="email" required className="lp-form-input" placeholder="you@example.com" />
+                </div>
+                <div className="lp-form-group">
+                  <label htmlFor="interest" className="lp-form-label">使ってみたい度</label>
+                  <select name="interest" id="interest" className="lp-form-select">
+                    <option value="試してみたい">試してみたい</option>
+                    <option value="かなり使いたい">かなり使いたい</option>
+                    <option value="まず話を聞きたい">まず話を聞きたい</option>
+                  </select>
+                </div>
+                <div className="lp-form-group">
+                  <label htmlFor="message" className="lp-form-label">競馬の収支管理で困っていること（任意）</label>
+                  <textarea name="message" id="message" rows={2} className="lp-form-textarea" placeholder="例: メモ帳での記録が続かない..."></textarea>
+                </div>
+                <button type="submit" className="lp-button-blue-full">
+                  β版の案内を受け取る
+                </button>
+              </form>
+
+              <div className="lp-pricing-alt-actions">
+                <a href="https://x.com/jun_devlog" target="_blank" rel="noreferrer" className="lp-button-dark-full">
+                  Xでフィードバックする
+                </a>
+                <button className="lp-button-dark-full" onClick={onEnter}>
+                  デモ画面を試す <span className="arrow">→</span>
+                </button>
+              </div>
               <p className="lp-pricing-note">
                 予想の提供・自動投票は行いません。記録と振り返りのためのツールです。
               </p>
