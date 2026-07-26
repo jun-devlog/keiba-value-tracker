@@ -12,9 +12,12 @@ import { BetCreateForm } from './components/BetCreateForm';
 import { BetsSection } from './components/BetsSection';
 import { ResultCreateForm } from './components/ResultCreateForm';
 import { ResultSection } from './components/ResultSection';
+import { LandingPage } from './components/LandingPage';
 import './App.css';
 
 function App() {
+  const [showDashboard, setShowDashboard] = useState<boolean>(false);
+  
   const [data, setData] = useState<StatsSummary | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -236,41 +239,45 @@ function App() {
           <span className="badge-version">v0.3.0 MVP</span>
         </div>
       </header>
-      
-      <main className="app-main">
-        <StatsSummarySection stats={data} isLoading={isLoading} error={error} />
 
-        <RaceCreateForm onSuccess={loadRaces} />
+      {!showDashboard ? (
+        <LandingPage onEnter={() => setShowDashboard(true)} />
+      ) : (
+        <main className="app-main">
+          <StatsSummarySection stats={data} isLoading={isLoading} error={error} />
 
-        <RacesSection 
-          races={races} 
-          isLoading={isRacesLoading} 
-          error={racesError} 
-          selectedRaceId={selectedRaceId} 
-          onRaceSelect={setSelectedRaceId} 
-          onUpdateRace={handleUpdateRace}
-          onDeleteRace={handleDeleteRace}
-        />
+          <RaceCreateForm onSuccess={loadRaces} />
 
-        {selectedRaceId && (
-          <div className="details-area">
-            <HorseCreateForm raceId={selectedRaceId} onSuccess={() => loadHorses(selectedRaceId)} />
-            <HorsesSection
-              horses={horses}
-              isLoading={isHorsesLoading}
-              error={horsesError}
-              onUpdateHorse={handleUpdateHorse}
-              onDeleteHorse={handleDeleteHorse}
-            />
-            <PredictionCreateForm raceId={selectedRaceId} horses={horses} isHorsesLoading={isHorsesLoading} onSuccess={() => loadPredictions(selectedRaceId)} />
-            <PredictionsSection predictions={predictions} isLoading={isPredictionsLoading} error={predictionsError} horses={horses} onUpdatePrediction={handleUpdatePrediction} onDeletePrediction={handleDeletePrediction} />
-            <BetCreateForm raceId={selectedRaceId} onSuccess={() => loadBets(selectedRaceId)} />
-            <BetsSection bets={bets} isLoading={isBetsLoading} error={betsError} onUpdateBet={handleUpdateBet} onDeleteBet={handleDeleteBet} />
-            <ResultCreateForm raceId={selectedRaceId} onSuccess={() => { loadResult(selectedRaceId); loadStats(); }} />
-            <ResultSection result={result} isLoading={isResultLoading} error={resultError} onUpdateResult={handleUpdateResult} onDeleteResult={handleDeleteResult} />
-          </div>
-        )}
-      </main>
+          <RacesSection 
+            races={races} 
+            isLoading={isRacesLoading} 
+            error={racesError} 
+            selectedRaceId={selectedRaceId} 
+            onRaceSelect={setSelectedRaceId} 
+            onUpdateRace={handleUpdateRace}
+            onDeleteRace={handleDeleteRace}
+          />
+
+          {selectedRaceId && (
+            <div className="details-area">
+              <HorseCreateForm raceId={selectedRaceId} onSuccess={() => loadHorses(selectedRaceId)} />
+              <HorsesSection
+                horses={horses}
+                isLoading={isHorsesLoading}
+                error={horsesError}
+                onUpdateHorse={handleUpdateHorse}
+                onDeleteHorse={handleDeleteHorse}
+              />
+              <PredictionCreateForm raceId={selectedRaceId} horses={horses} isHorsesLoading={isHorsesLoading} onSuccess={() => loadPredictions(selectedRaceId)} />
+              <PredictionsSection predictions={predictions} isLoading={isPredictionsLoading} error={predictionsError} horses={horses} onUpdatePrediction={handleUpdatePrediction} onDeletePrediction={handleDeletePrediction} />
+              <BetCreateForm raceId={selectedRaceId} onSuccess={() => loadBets(selectedRaceId)} />
+              <BetsSection bets={bets} isLoading={isBetsLoading} error={betsError} onUpdateBet={handleUpdateBet} onDeleteBet={handleDeleteBet} />
+              <ResultCreateForm raceId={selectedRaceId} onSuccess={() => { loadResult(selectedRaceId); loadStats(); }} />
+              <ResultSection result={result} isLoading={isResultLoading} error={resultError} onUpdateResult={handleUpdateResult} onDeleteResult={handleDeleteResult} />
+            </div>
+          )}
+        </main>
+      )}
     </div>
   );
 }

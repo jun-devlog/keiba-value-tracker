@@ -458,3 +458,192 @@ body {
 .color-negative { color: var(--status-error) !important; }
 .color-neutral { color: var(--text-tertiary) !important; }
 .color-highlight { color: var(--accent-gold) !important; }
+
+/* ==========================================================================
+   Landing Page (LP) Styles
+   ========================================================================== */
+
+.lp-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  color: var(--text-primary);
+  animation: fadeInDown 0.5s ease-out;
+}
+
+.lp-hero {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.lp-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.lp-catchphrase {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.lp-subcopy {
+  font-size: 1rem;
+  color: var(--text-tertiary);
+  margin-bottom: 2.5rem;
+}
+
+.lp-cta-primary {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.lp-cta-primary:hover {
+  background: var(--accent-primary-hover);
+  transform: translateY(-2px);
+}
+
+.lp-section {
+  margin-bottom: 5rem;
+}
+
+.lp-section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.lp-target-list {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem 3rem;
+  list-style: none;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.lp-target-list li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.lp-target-list li:last-child {
+  margin-bottom: 0;
+}
+
+.lp-target-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: bold;
+}
+
+.lp-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.lp-feature-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.lp-feature-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-primary);
+}
+
+.lp-feature-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.lp-feature-card p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.lp-cta-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.lp-pricing-card {
+  margin-bottom: 3rem;
+}
+
+.lp-pricing-beta {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 0.5rem;
+}
+
+.lp-pricing-future {
+  font-size: 1rem;
+  color: var(--text-tertiary);
+}
+
+.lp-contact-box p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.lp-cta-secondary {
+  display: inline-block;
+  margin-top: 1.5rem;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.lp-cta-secondary:hover {
+  background: var(--hover-bg);
+  border-color: var(--text-secondary);
+}
+
+.lp-footer {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-tertiary);
+  font-size: 0.9rem;
+}
