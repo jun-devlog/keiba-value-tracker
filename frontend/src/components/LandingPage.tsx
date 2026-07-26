@@ -3,6 +3,14 @@ interface LandingPageProps {
 }
 
 export function LandingPage({ onEnter }: LandingPageProps) {
+  const scrollToForm = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const formElement = document.getElementById('beta-form');
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="lp-shell">
       {/* プレミアムな質感の背景要素 */}
@@ -20,7 +28,7 @@ export function LandingPage({ onEnter }: LandingPageProps) {
           <span className="lp-brand-badge">BETA</span>
         </div>
         <nav className="lp-nav">
-          <button className="lp-nav-link" onClick={onEnter}>Demo</button>
+          <button className="lp-nav-link" onClick={scrollToForm}>受付フォーム</button>
           <a href="https://x.com/jun_devlog" target="_blank" rel="noreferrer" className="lp-nav-btn">Xでフィードバック</a>
         </nav>
       </header>
@@ -40,8 +48,8 @@ export function LandingPage({ onEnter }: LandingPageProps) {
               Excelやメモ帳では続きにくい収支管理を、もっと振り返りやすく。
             </p>
             <div className="lp-hero-actions">
-              <button className="lp-button-primary" onClick={onEnter}>
-                デモ画面を試す <span className="arrow">→</span>
+              <button className="lp-button-primary" onClick={scrollToForm}>
+                受付フォームへ進む <span className="arrow">↓</span>
               </button>
               <a href="https://x.com/jun_devlog" target="_blank" rel="noreferrer" className="lp-button-secondary">
                 Xでフィードバックする
@@ -276,7 +284,7 @@ export function LandingPage({ onEnter }: LandingPageProps) {
             </div>
             
             <div className="lp-pricing-actions">
-              <form action="https://formspree.io/f/mvzevnvj" method="POST" className="lp-beta-form">
+              <form action="https://formspree.io/f/mvzevnvj" method="POST" className="lp-beta-form" id="beta-form">
                 <div className="lp-form-group">
                   <label htmlFor="email" className="lp-form-label">メールアドレス <span className="lp-form-required">*</span></label>
                   <input type="email" name="email" id="email" required className="lp-form-input" placeholder="you@example.com" />
@@ -302,13 +310,16 @@ export function LandingPage({ onEnter }: LandingPageProps) {
                 <a href="https://x.com/jun_devlog" target="_blank" rel="noreferrer" className="lp-button-dark-full">
                   Xでフィードバックする
                 </a>
-                <button className="lp-button-dark-full" onClick={onEnter}>
-                  デモ画面を試す <span className="arrow">→</span>
-                </button>
               </div>
               <p className="lp-pricing-note">
                 予想の提供・自動投票は行いません。記録と振り返りのためのツールです。
               </p>
+              
+              <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+                <button className="lp-dev-demo-link" onClick={onEnter}>
+                  開発用デモを開く (API接続なし)
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -322,7 +333,7 @@ export function LandingPage({ onEnter }: LandingPageProps) {
             <span className="lp-brand-badge">BETA</span>
           </div>
           <div className="lp-footer-links">
-            <button className="lp-nav-link" onClick={onEnter}>Demo</button>
+            <button className="lp-nav-link" onClick={scrollToForm}>受付フォーム</button>
             <a href="https://x.com/jun_devlog" target="_blank" rel="noreferrer" className="lp-nav-link">Feedback on X</a>
           </div>
         </div>

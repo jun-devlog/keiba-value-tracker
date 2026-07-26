@@ -87,6 +87,23 @@ body {
   letter-spacing: 0.05em;
 }
 
+.app-header-back-btn {
+  margin-top: 1.5rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.app-header-back-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
 /* Dashboard Main */
 .app-main {
   display: flex;
@@ -1167,6 +1184,20 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+
+.lp-dev-demo-link {
+  background: transparent;
+  border: none;
+  color: #475569; /* Slate-600 */
+  font-size: 0.75rem;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.lp-dev-demo-link:hover {
+  color: #94a3b8; /* Slate-400 */
 }
 
 .lp-button-blue-full {

@@ -242,6 +242,9 @@ function App() {
               <h1>Keiba Value Tracker</h1>
               <span className="badge-version">v0.3.0 MVP</span>
             </div>
+            <button className="app-header-back-btn" onClick={() => setShowDashboard(false)}>
+              LPに戻る
+            </button>
           </header>
           <main className="app-main">
           <StatsSummarySection stats={data} isLoading={isLoading} error={error} />
